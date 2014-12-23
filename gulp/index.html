@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>gulp 学习</title>
+	<link rel="stylesheet" href="bower_components/semantic/dist/semantic.css">
+	<script src="bower_components/jquery/dist/jquery.min.js"></script>
+	<script src="bower_components/angular/angular.js"></script>
+	<script src="bower_components/semantic/dist/semantic.min.js"></script>
+
+	<script>
+
+		
+
+		var myApp = angular.module("myApp",[]);
+
+		myApp.controller('myCtrl',function($scope, $timeout){
+
+			$scope.test = "huxiongfei";
+
+			$scope.opend = true;
+
+			$timeout(function() {
+				$scope.opend = false;
+			}, 2000);
+
+		});
+
+		myApp.directive('checkbox', function(){
+			return {
+				scope: {
+					opend: '='
+				},
+				restrict: 'E',
+				template: '<div class="ui toggle checkbox"><input ng-model="opend" type="checkbox"></div>',
+				link: function(scope, element, attrs){
+					$(element).checkbox({onChange: function(){
+						scope.opend = $(element).find('input').prop("checked");
+						scope.$apply();
+					}});
+				}
+			}
+		});
+
+
+
+// 		var directives = angular.module('myapp', []);
+// directives.directive('checkbox', function() {
+//    return function(scope, element, attrs) {
+//        $(element).checkbox({onChange:function(){
+//            var modelName = $(this).attr('ng-model');
+//            var value = $(this).attr("ng-"+$(this).prop("checked")+"-value");
+//            eval("scope."+modelName+"='"+value+"';");
+//            scope.$apply();
+//            var onChange = $(this).attr('ng-change');
+//            if(onChange){
+//                eval("scope."+onChange);
+//            }
+//        }});
+//    }
+// });
+
+	</script>
+
+</head>
+<body ng-app="myApp">
+
+	<div ng-controller="myCtrl">
+		
+		<input type="text" ng-model="test"/>
+		<input class="checkbox ui" type="checkbox" ng-model="opend"/>
+
+
+		
+		<div class="ui toggle checkbox">
+	      <input type="radio" name="privacy">
+	      <label>Allow <b>anyone</b> to see my account</label>
+	    </div>
+
+		<h1>{{ test }}</h1>
+
+		<checkbox opend='opend'></checkbox>
+
+	</div>
+
+</body>
+</html>

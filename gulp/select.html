@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>gulp 学习</title>
+	<link rel="stylesheet" href="bower_components/semantic/dist/semantic.css">
+	<script src="bower_components/jquery/dist/jquery.min.js"></script>
+
+	
+	<style>
+
+		.container{
+			margin: 20px;
+		}
+
+	</style>
+
+
+	<script>
+
+
+		$(function(){
+
+			$(document).on('click', function(){
+				$('.menu').hide();
+			});
+
+			$('select').each(function(){
+
+					// 定义自己
+					var self = $(this);
+
+					// 定义选中的值
+					var value = self.val();
+
+					// 选中的值对应的text
+					var text = "";
+
+					var div = $('<div class="ui selection dropdown"><i class="dropdown icon"></i></div>');
+					var input = $('<input type="hidden">');
+					var default_text = $('<div class="default text"></div>');
+					var menu = $('<div class="menu"></div>');
+
+					var options = [];
+
+					var optionNodes = self.find('>option');
+
+					var main = function(){
+
+						ininSelect();
+
+						ininEvent();
+					}
+
+					var ininEvent = function(){
+
+						div.find('i.icon').click(function(){
+
+							menu.toggle();
+							return false;
+						});
+
+						div.click(function(){
+							div.find('i.icon').click();
+							return false;
+						});
+
+						menu.find('>.item').click(function(){
+
+							$(this).siblings().removeClass('active').removeClass('selected');
+
+							$(this).addClass('active').addClass('selected');
+
+							menu.hide();
+
+							setValue($(this).data('value'), $(this).text());
+
+							return false;
+						});
+					}
+
+					var setValue = function(value, text){
+						console.log(value);
+						input.val(value);
+						default_text.text(text);
+					}
+
+					var ininSelect = function(){
+						for (var i = 0; i < optionNodes.length; i++) {
+							var option = {
+								'value': optionNodes[i].value,
+								'text': optionNodes[i].innerHTML
+							};
+
+							var item = $('<div class="item" data-value="'+option.value+'">'+option.text+'</div>');
+
+							if(option.value == value){
+								text = option.text;
+								default_text.text(text);
+								item.addClass('active').addClass('selected');
+							}
+
+							menu.append(item);
+
+							options.push(option);
+						};
+
+						div.append(default_text);
+						div.append(menu);
+						div.append(input);
+
+						self.after(div).hide();
+					}
+
+					main();
+
+			});
+
+		});
+
+
+
+	</script>
+
+</head>
+<body ng-app="myApp">
+	
+	<div class="container">
+		
+		<label for="">选择框：</label>
+
+		<select name="mysel" id="">
+			<option selected value="1">选项一</option>
+			<option value="2">选项二</option>
+			<option value="3">选项三</option>
+			<option value="4">选项四</option>
+			<option value="5">选项五</option>
+		</select>
+
+
+		<br>
+		<br>
+		<br>
+		<br>
+		<br>
+		<br>
+		<br>
+		<br>
+		<br>
+		<br>
+		<br>
+
+		<div class="ui selection dropdown">
+		  <input type="hidden" name="gender">
+		  <div class="default text">Gender</div>
+		  <i class="dropdown icon"></i>
+		  <div class="menu">
+		    <div class="item" data-value="1">Male</div>
+		    <div class="item" data-value="0">Female</div>
+		  </div>
+		</div>
+
+
+	</div>
+
+</body>
+</html>
