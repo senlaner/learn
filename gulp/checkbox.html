@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>checkbox</title>
+<style>
+	*{padding:0;margin:0;box-sizing:border-box;}
+
+	.formBox{width: 400px;margin:50px auto;overflow: hidden;zoom:1;}
+	.formBox li{float: left;display: inline;}
+	/*复选框*/
+	.checkbox{float:left;display:inline;width:16px;height: 16px;line-height: 16px;cursor: pointer;margin-right: 10px;}
+	.checkbox .input{display:block;width: 16px;height: 16px;border: 1px solid #dce0e0;background-color: #fff;border-radius: 3px;position: relative;}
+	.checked .input:after{position: absolute;width: 8px;height: 8px;content: "";left: 3px;top: 3px;background-color: #ff4861;border-radius: 2px;}
+	.checkbox input.input{display: none;}
+
+</style>
+<script src="bower_components/jquery/dist/jquery.min.js"></script>
+<script>
+// ;(function($){
+// 	$.fn.jCheckbox = function(settings){
+// 		settings = jQuery.extend({
+// 			wrapClass : "checkbox",
+// 			radioClass : "input",
+// 			checkedClass : "checked"
+// 		},settings);
+
+// 		var wrapClass = settings.wrapClass;
+// 		var radioClass = settings.radioClass;
+// 		var checkedClass = settings.checkedClass;
+
+// 		this.each(function(){
+// 			if($(this).closest("."+wrapClass).length == 0){
+// 				init($(this));
+// 			};
+
+// 			var _obj;
+// 			var _checked;
+// 			var _parent;
+
+// 			function init(obj){
+// 				_obj = obj;
+// 				wrapHtml();
+// 				bindEvent();
+// 			}
+// 			function wrapHtml(){
+// 				_obj.wrap('<label class="'+wrapClass+'"></label>');
+// 				_parent = _obj.closest("."+wrapClass);
+// 				_obj.before('<span class="'+radioClass+'"></span>');
+// 			}
+// 			function bindEvent(){
+// 				_obj.on("click",function(e){
+// 					if(_obj.prop("checked")){
+// 						_parent.addClass("checked");
+// 					}else{
+// 						_parent.removeClass("checked");
+// 					}
+// 				});
+// 			}
+// 			// init();
+// 		});
+// 	}
+// })(jQuery);
+
+
+;(function($){
+
+	$.fn.jCheckbox = function(settings){
+
+		settings = jQuery.extend({
+			wrapClass : "checkbox",
+			radioClass : "input",
+			checkedClass : "checked"
+		},settings);
+
+		// 配置中已经定义了，不用在重新var 使用的时候直接 settings.* ， 这样易于理解
+		// var wrapClass = settings.wrapClass;
+		// var radioClass = settings.radioClass;
+		// var checkedClass = settings.checkedClass;
+
+		// 这地方需要 return 这样可以保持链式操作方式
+		// this.each(function(){
+		return this.each(function(){
+
+			var self = $(this), _parent;
+
+			// 通过 data 方法设置一个变量来记录是否已经初始化过 checkbox 插件
+			if(self.data('is-init-checkbox'))
+				return ;
+
+			self.data('is-init-checkbox', true);
+
+			console.log(self);
+
+			var main = function(){
+				wrapHtml();
+				bindEvent();
+			}
+
+			// 我比较喜欢使用申明的方式定义函数
+			var wrapHtml = function(){
+				self.wrap('<label class="'+settings.wrapClass+'"></label>')
+					.before('<span class="'+settings.radioClass+'"></span>');
+
+				// 这地方直接使用 parent 即可， 不用使用 closest 你可以研究一下 parent、parents 和 closest 的区别
+				_parent = self.parent();
+
+				// 设置默认值
+				if(self.prop('checked'))
+					_parent.addClass(settings.checkedClass);
+			}
+
+			var bindEvent = function(){
+				self.click(function(){
+					_parent.toggleClass(settings.checkedClass);
+				});
+			};
+
+			main();
+
+		});
+
+	}
+})(jQuery);
+
+$(function(){
+	function checkbox(){
+
+		$("#huxf").jCheckbox({
+			wrapClass : "checkbox",
+			radioClass : "input",
+			checkedClass : "checked"
+		});
+
+		$("input.input").jCheckbox({
+			wrapClass : "checkbox",
+			radioClass : "input",
+			checkedClass : "checked"
+		});
+	}
+	checkbox();
+});
+</script>
+</head>
+<body>
+	<ul class="formBox">
+		<li>
+			<input id="huxf" type="checkbox" class="input"> <label for="huxf">李玉华</label>
+		</li>
+		<li>
+			<input type="checkbox" class="input">李玉华
+		</li>
+	</ul>
+</body>
+</html>
