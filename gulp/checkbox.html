@@ -82,15 +82,13 @@
 		// this.each(function(){
 		return this.each(function(){
 
-			var self = $(this), _parent;
+			var self = $(this);
 
 			// 通过 data 方法设置一个变量来记录是否已经初始化过 checkbox 插件
 			if(self.data('is-init-checkbox'))
 				return ;
 
 			self.data('is-init-checkbox', true);
-
-			console.log(self);
 
 			var main = function(){
 				wrapHtml();
@@ -102,17 +100,33 @@
 				self.wrap('<label class="'+settings.wrapClass+'"></label>')
 					.before('<span class="'+settings.radioClass+'"></span>');
 
-				// 这地方直接使用 parent 即可， 不用使用 closest 你可以研究一下 parent、parents 和 closest 的区别
-				_parent = self.parent();
-
 				// 设置默认值
 				if(self.prop('checked'))
-					_parent.addClass(settings.checkedClass);
+					self.parent().addClass(settings.checkedClass);
+			}
+
+			var autoRender = function(node){
+
+                if(!node.data('is-init-checkbox'))
+                    return ;
+
+				if(node.prop('checked'))
+					node.parent().addClass(settings.checkedClass);
+				else
+					node.parent().removeClass(settings.checkedClass);
 			}
 
 			var bindEvent = function(){
 				self.click(function(){
-					_parent.toggleClass(settings.checkedClass);
+
+					autoRender(self);
+
+					$('input[name='+self.attr('name')+']').each(function(){
+                        autoRender($(this));
+					});
+
+
+					// self._parent.toggleClass(settings.checkedClass);
 				});
 			};
 
@@ -121,22 +135,28 @@
 		});
 
 	}
-})(jQuery);
+})(jQuery); 
 
 $(function(){
 	function checkbox(){
 
-		$("#huxf").jCheckbox({
+		// $("#huxf").jCheckbox({
+		// 	wrapClass : "checkbox",
+		// 	radioClass : "input",
+		// 	checkedClass : "checked"
+		// });
+
+		$("input:radio,input:checkbox").jCheckbox({
 			wrapClass : "checkbox",
 			radioClass : "input",
 			checkedClass : "checked"
 		});
 
-		$("input.input").jCheckbox({
-			wrapClass : "checkbox",
-			radioClass : "input",
-			checkedClass : "checked"
-		});
+        // $("input:radio").jCheckbox({
+        //     wrapClass : "checkbox",
+        //     radioClass : "input",
+        //     checkedClass : "checked"
+        // });
 	}
 	checkbox();
 });
@@ -145,11 +165,40 @@ $(function(){
 <body>
 	<ul class="formBox">
 		<li>
-			<input id="huxf" type="checkbox" class="input"> <label for="huxf">李玉华</label>
+			<input checked id="huxf" type="checkbox" name="h1" class="input"> <label for="huxf">李玉华1</label>
 		</li>
 		<li>
-			<input type="checkbox" class="input">李玉华
+			<input type="checkbox" name="h1" class="input">李玉华
 		</li>
 	</ul>
+	
+	<ul class="formBox">
+		<li>
+			<input type="radio" name="huxf" class="input"> <label>李玉华1</label>
+		</li>
+		<li>
+			<input type="radio" name="huxf" class="input">李玉华
+		</li>
+
+        <li>
+            <input type="radio" name="huxf" class="input">李玉华3
+        </li>
+	</ul>
+
+
+    <ul class="formBox">
+        <li>
+            <input type="radio" name="huxf1" class="input"> <label>李玉华11</label>
+        </li>
+        <li>
+            <input type="radio" name="huxf1" class="input">李玉华11
+        </li>
+
+        <li>
+            <input type="radio" checked name="huxf1" class="input">李玉华3
+        </li>
+    </ul>
+
+
 </body>
 </html>

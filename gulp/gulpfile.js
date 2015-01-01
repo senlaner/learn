@@ -11,7 +11,7 @@ gulp.task('server', function() {
         var options = url.parse('http://topka.cn/');
         options.route = '/api';
         return proxy(options);
-      })()]
+      })()];
     }
   });
 });
@@ -24,6 +24,6 @@ gulp.task('html', function () {
 
 gulp.task('watch', function() {
     gulp.watch('./*.html', ['html']);
-})
+});
  
 gulp.task('default', ['server','watch']);
