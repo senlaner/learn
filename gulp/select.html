@@ -18,8 +18,11 @@
 
 	<script>
 
+		
 
 		$(function(){
+
+			// return;
 
 			$(document).on('click', function(){
 				$('.menu').hide();
@@ -79,10 +82,16 @@
 						});
 					}
 
-					var setValue = function(value, text){
-						console.log(value);
-						input.val(value);
+					var setValue = function(val, text){
+						console.log(val);
+						input.val(val);
 						default_text.text(text);
+
+						if(value != val)
+							self.change();
+
+						value = val;
+
 					}
 
 					var ininSelect = function(){
@@ -119,6 +128,26 @@
 		});
 
 
+		$(function(){
+
+			$('#huxf').change(function(){
+
+				console.log('change event 1 ----------------');
+
+				console.log(arguments);
+
+				console.log(this);
+			});
+
+			$('#huxf').change(function(){
+
+				console.log('change event 2 ----------------');
+
+			});
+
+		});
+
+
 
 	</script>
 
@@ -129,7 +158,7 @@
 		
 		<label for="">选择框：</label>
 
-		<select name="mysel" id="">
+		<select id="huxf" name="mysel" id="">
 			<option selected value="1">选项一</option>
 			<option value="2">选项二</option>
 			<option value="3">选项三</option>
